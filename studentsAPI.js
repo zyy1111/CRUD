@@ -50,14 +50,36 @@ exports.edit = (student, callback) => {
     if(err) {
       callback(err);
     } else {
-      var students = JSON.parse(data).students;
-      var targetStudent = students.find((item) => {
+      let students = JSON.parse(data).students;
+      let targetStudent = students.find((item) => {
         return item.id === parseInt(student.id);  //传进来的是字符串
       })
-      for(var key in student) {
+      for(let key in student) {
         targetStudent[key] = student[key];
       }
-      var fileData = JSON.stringify({ students: students });
+      let fileData = JSON.stringify({ students: students });
+      fs.writeFile(dbPath, fileData, (err) => {
+        if(err) {
+          callback(err);
+        } else {
+          callback(null);
+        }
+      })
+    }
+  })
+};
+
+exports.deleteById = (id, callback) => {
+  fs.readFile(dbPath, 'utf8', (err, data) => {
+    if(err) {
+      callback(err);
+    } else {
+      let students = JSON.parse(data).students;
+      let targetId = students.findIndex((item) => {
+        return item.id === id;
+      });
+      students.splice(targetId, 1);
+      let fileData = JSON.stringify({ students: students });
       fs.writeFile(dbPath, fileData, (err) => {
         if(err) {
           callback(err);

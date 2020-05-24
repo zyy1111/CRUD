@@ -55,7 +55,6 @@ router.get('/students/edit', (req, res) => {
 });
 
 router.post('/students/edit', (req, res) => {
-  console.log(req.body);
   Student.edit(req.body, (err) => {
     if(err) {
       res.status(500).send('Server Error');
@@ -63,6 +62,16 @@ router.post('/students/edit', (req, res) => {
       res.redirect('/students');
     }
   })
+});
+
+router.get('/students/delete', (req, res) => {
+  Student.deleteById(parseInt(req.query.id), (err) => {
+    if(err) {
+      res.status(500).send('Server Error');
+    } else {
+      res.redirect('/students');
+    }
+  });
 })
 
 
