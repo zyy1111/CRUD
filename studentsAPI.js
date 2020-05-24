@@ -1,6 +1,16 @@
 const dbPath = './db.json';
 const fs = require('fs');
 
+let writeToFile = (Path, fileData, callback) => {
+  fs.writeFile(Path, fileData, (err) => {
+    if(err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
+};
+
 exports.find = (callback) => {
   fs.readFile(dbPath, 'utf8', (err, data) => {
     if(err) {
@@ -34,13 +44,14 @@ exports.save = (student, callback) => {
       student.id = students[students.length - 1].id + 1;
       students.push(student);
       let fileData = JSON.stringify({students: students});
-      fs.writeFile(dbPath, fileData, (err) => {
-        if(err) {
-          callback(err);
-        } else {
-          callback(null);
-        }
-      })
+      writeToFile(dbPath, fileData, callback);
+      // fs.writeFile(dbPath, fileData, (err) => {
+      //   if(err) {
+      //     callback(err);
+      //   } else {
+      //     callback(null);
+      //   }
+      // })
     }
   })
 };
@@ -58,13 +69,14 @@ exports.edit = (student, callback) => {
         targetStudent[key] = student[key];
       }
       let fileData = JSON.stringify({ students: students });
-      fs.writeFile(dbPath, fileData, (err) => {
-        if(err) {
-          callback(err);
-        } else {
-          callback(null);
-        }
-      })
+      writeToFile(dbPath, fileData, callback);
+      // fs.writeFile(dbPath, fileData, (err) => {
+      //   if(err) {
+      //     callback(err);
+      //   } else {
+      //     callback(null);
+      //   }
+      // })
     }
   })
 };
@@ -80,13 +92,14 @@ exports.deleteById = (id, callback) => {
       });
       students.splice(targetId, 1);
       let fileData = JSON.stringify({ students: students });
-      fs.writeFile(dbPath, fileData, (err) => {
-        if(err) {
-          callback(err);
-        } else {
-          callback(null);
-        }
-      })
+      writeToFile(dbPath, fileData, callback);
+      // fs.writeFile(dbPath, fileData, (err) => {
+      //   if(err) {
+      //     callback(err);
+      //   } else {
+      //     callback(null);
+      //   }
+      // })
     }
   })
 }
